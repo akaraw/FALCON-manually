@@ -1,14 +1,14 @@
 # FALCON-manually
 For users who can't get PacBio's [FALCON](https://github.com/PacificBiosciences/FALCON-integrate) assembler running on their cluster
 
+## Setup
 
-## Other pipelines
-* https://github.com/rrwick/DASCRUBBER-wrapper (also for Nano)
-* https://github.com/thiesgehrmann/FungalAssemblerPipeline
+### Install Gene Myers' tools
+Those tools can be found [here](https://github.com/thegenemyers). Easier way to install them is with help of [bioconda](https://github.com/bioconda/bioconda-recipes) `conda install damasker daligner dascrubber dazz_db`
 
-
-##Falcon
-module load gcc/4.9.3-2.25
+### Install Falcon-integrate
+```
+module load gcc/4.9.3-2.25 #(you require at least gcc 4.9)
 git clone https://github.com/PacificBiosciences/FALCON-integrate.git
 cd FALCON-integrate
 find . -type f -print0 | xargs -0 sed -i.bak 's|git:|https:|g'
@@ -19,11 +19,15 @@ source env.sh
 make config-edit-user
 make -j all
 make test
+```
 
-## Checking Commands
-$ grep "Mem" HPCdaligner.o26* | cut -d':' -f3 | sort -
-grep "CPU" HPCdaligner.o26* | cut -d" " -f5 | sort -
-$ grep "ill" HPCdaligner.o26*
+## Commands to check each result
+```
+grep "ill" <job_output>.o*                             # check whether no jobs have been killed
+grep "Mem" <job_output>.o* | cut -d':' -f3 | sort -    # Memory usage
+grep "CPU" <job_output>.o* | cut -d" " -f5 | sort -    # Time usage
+```
+
 
 
 
@@ -321,4 +325,10 @@ PBS Job 2905124.pbs
 CPU time  : 00:18:53
 Wall time : 00:19:00
 Mem usage : 33032488kb
+
+
+## Acknoledment
+
+* https://github.com/rrwick/DASCRUBBER-wrapper (also for Nano)
+* https://github.com/thiesgehrmann/FungalAssemblerPipeline
 
