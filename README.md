@@ -67,7 +67,7 @@ Catrack -v preassemblyDB tan
 rm .preassemblyDB.*.tan.*
 ```
 
-### HPC.REPmask
+#### HPC.REPmask
 ```
 source activate thegenemyers
 HPC.REPmask -g1 -c20 -mdust -mtan preassemblyDB -T4 -fREPmask
@@ -79,7 +79,7 @@ Catrack -v preassemblyDB rep1
 rm .preassemblyDB.*.rep1.*
 ```
 
-## HPC.daligner
+### HPC.daligner
 ```
 source activate thegenemyers
 DBstats -b1 -mdust -mtan -mrep1 preassemblyDB > DBstats.out
@@ -98,47 +98,40 @@ sh HPC.parallel_pbs.sh daligner.07.CHECK.OPT  #MEM:1.3GB; CPU time:00:00:09
 sh daligner.08.RM
 ```
 
-# DASCRUBBER
+### Dascrubber: The Dazzler Read Scrubbing Suite
 ```
-./DASqv_pbs.sh preassemblyDB 6973 38               #MEM:0.5GB; CPU time:00:00:19
+./DASqv_pbs.sh preassemblyDB 6973 38                #MEM:0.5GB; CPU time:00:00:19
 Catrack -v preassemblyDB qual
 rm .preassemblyDB.*.qual.*
 ```
 
 ```
 find . -name "*.DAStrim" -type f -exec cat {} + > DAStrim-cmds
-sh HPC.parallel_pbs.sh DAStrim-cmds           #MEM:1.1GB; CPU time:00:00:26
+sh HPC.parallel_pbs.sh DAStrim-cmds                 #MEM:1.1GB; CPU time:00:00:26
 Catrack -v preassemblyDB trim  
 ```
 
 ```
-sh DASpatch_pbs.sh preassemblyDB                 #MEM:1.4GB; CPU time:00:00:16
+sh DASpatch_pbs.sh preassemblyDB                    #MEM:1.4GB; CPU time:00:00:16
 Catrack -v preassemblyDB patch  
 ```
 
 ```
-qsub DASedit_pbs.sh                         #MEM:0.9GB; CPU time:02:04:50
-
+qsub DASedit_pbs.sh                                 #MEM:0.9GB; CPU time:02:04:50
 ```
 
-```
-
-```
-## HPC.daligner with DASedit DB
+### HPC.daligner with DASedit DB
 ```
 source activate thegenemyers
-DBstats -b1 preassemblyDB-DASedit > DBstats.out
-
 HPC.daligner -H6973 -T4 -fdalignerDASedit preassemblyDB-DASedit   
-sh HPC.parallel_pbs.sh dalignerDASedit.01.OVL        #MEM:24GB; CPU time:05:17:29
-sh HPC.parallel_pbs.sh dalignerDASedit.02.CHECK.OPT        #MEM:0.001GB; CPU time:00:00:08
-sh HPC.parallel_pbs.sh dalignerDASedit.03.MERGE            #MEM:5GB; CPU time:00:02:00
-sh HPC.parallel_pbs.sh dalignerDASedit.04.CHECK.OPT        #MEM:1.3GB; CPU time:00:04:00
+sh HPC.parallel_pbs.sh dalignerDASedit.01.OVL               #MEM:24GB; CPU time:05:17:29
+sh HPC.parallel_pbs.sh dalignerDASedit.02.CHECK.OPT         #MEM:0.001GB; CPU time:00:00:08
+sh HPC.parallel_pbs.sh dalignerDASedit.03.MERGE             #MEM:5GB; CPU time:00:02:00
+sh HPC.parallel_pbs.sh dalignerDASedit.04.CHECK.OPT         #MEM:1.3GB; CPU time:00:04:00
 sh dalignerDASedit.06.MERGE  
-sh HPC.parallel_pbs.sh dalignerDASedit.06.MERGE            #MEM:4GB; CPU time:00:04:00
-sh HPC.parallel_pbs.sh dalignerDASedit.07.CHECK.OPT       #MEM:1.3GB; CPU time:00:04:00
+sh HPC.parallel_pbs.sh dalignerDASedit.06.MERGE             #MEM:4GB; CPU time:00:04:00
+sh HPC.parallel_pbs.sh dalignerDASedit.07.CHECK.OPT         #MEM:1.3GB; CPU time:00:04:00
 sh dalignerDASedit.08.RM
-
 ```
 
 ##LA4FALCON
