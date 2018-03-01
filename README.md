@@ -36,10 +36,10 @@ qsub bam2fasta_pbs.sh       #Adjust the PATH inside the script
 source activate thegenemyers
 find /work/waterhouse_team/All_RawData/Each_Cell_Raw/ -name "*.arrow" -type f > fasta2DB_input.fofn
 sed -i.bak 's|.arrow|.fasta|g' fasta2DB_input.fofn
-fasta2DB bananaDB -ffasta2DB_input.fofn
+fasta2DB preassemblyDB -ffasta2DB_input.fofn
 
-DBsplit -x500 -s250 bananaDB
-DBdust bananaDB
+DBsplit -x500 -s250 preassemblyDB
+DBdust preassemblyDB
 ```
 
 ### Commands to check each result
@@ -50,47 +50,41 @@ grep "CPU" <job_output>.o* | cut -d" " -f5 | sort -    # Time usage
 ```
 
 ## PREASSEMBLY 
-
-
-### TANmask
+### Damasker: The Dazzler Repeat Masking Suite
+#### TANmask
 ```
 source activate thegenemyers
-HPC.TANmask bananaDB -mdust -T4 -fTANmask
+HPC.TANmask preassemblyDB -mdust -T4 -fTANmask
 sh HPC.parallel_pbs.sh TANmask.01.OVL             #MEM:9GB; CPU time:00:06:25
 sh HPC.parallel_pbs.sh TANmask.02.CHECK.OPT       #MEM:0.3GB; CPU time:00:00:02
 sh HPC.parallel_pbs.sh TANmask.03.MASK            #MEM:0.4GB; CPU time:00:00:01  
 sh TANmask.04.RM
-qsub catrackTAN_pbs.sh
-#      Catrack -v bananaDB tan
-#      rm .bananaDB.*.tan.*
-PBS Job 2678948.pbs
-CPU time  : 00:00:01
-Wall time : 00:00:11
-Mem usage : 8164kb
+Catrack -v preassemblyDB tan
+rm .preassemblyDB.*.tan.*
 ```
 
-## HPC.REPmask
+### HPC.REPmask
 ```
 source activate thegenemyers
-HPC.REPmask -g1 -c20 -mdust -mtan bananaDB -T4 -fREPmask
+HPC.REPmask -g1 -c20 -mdust -mtan preassemblyDB -T4 -fREPmask
 sh HPC.parallel_pbs.sh REPmask.01.OVL           #MEM:30GB; CPU time:02:00:01
 sh HPC.parallel_pbs.sh REPmask.02.CHECK.OPT     #MEM:1.4GB; CPU time:00:00:03
 sh HPC.parallel_pbs.sh REPmask.03.MASK          #MEM:0.01GB; CPU time:00:00:06
 sh REPmask.04.RM
-Catrack -v bananaDB rep1
-rm .bananaDB.*.rep1.*
+Catrack -v preassemblyDB rep1
+rm .preassemblyDB.*.rep1.*
 ```
 
 ## HPC.daligner
 ```
 source activate thegenemyers
-DBstats -b1 -mdust -mtan -mrep1 bananaDB > DBstats.out
+DBstats -b1 -mdust -mtan -mrep1 preassemblyDB > DBstats.out
 
 /work/waterhouse_team/apps/bin> python  calc_cutoff.py --genome_size 1800000000 --coverage 38 --db_stats
 /work/waterhouse_team/banana/assembly/DBstats.out
 6973
 
-HPC.daligner -mdust -mtan -mrep1 -H6973 -T4 -fdaligner bananaDB   
+HPC.daligner -mdust -mtan -mrep1 -H6973 -T4 -fdaligner preassemblyDB   
 sh HPC.parallel_pbs.sh daligner.01.OVL        #MEM:22GB; CPU time:01:12:00
 sh HPC.parallel_pbs.sh daligner.02.CHECK.OPT  #MEM:0.001GB; CPU time:00:00:08
 sh HPC.parallel_pbs.sh daligner.03.MERGE      #MEM:3GB; CPU time:00:00:06
@@ -104,20 +98,20 @@ sh daligner.08.RM
 
 # DASCRUBBER
 ```
-./DASqv_pbs.sh bananaDB 6973 38               #MEM:0.5GB; CPU time:00:00:19
-Catrack -v bananaDB qual
-rm .bananaDB.*.qual.*
+./DASqv_pbs.sh preassemblyDB 6973 38               #MEM:0.5GB; CPU time:00:00:19
+Catrack -v preassemblyDB qual
+rm .preassemblyDB.*.qual.*
 ```
 
 ```
 find . -name "*.DAStrim" -type f -exec cat {} + > DAStrim-cmds
 sh HPC.parallel_pbs.sh DAStrim-cmds           #MEM:1.1GB; CPU time:00:00:26
-Catrack -v bananaDB trim  
+Catrack -v preassemblyDB trim  
 ```
 
 ```
-sh DASpatch_pbs.sh bananaDB                 #MEM:1.4GB; CPU time:00:00:16
-Catrack -v bananaDB patch  
+sh DASpatch_pbs.sh preassemblyDB                 #MEM:1.4GB; CPU time:00:00:16
+Catrack -v preassemblyDB patch  
 ```
 
 ```
@@ -131,9 +125,9 @@ qsub DASedit_pbs.sh                         #MEM:0.9GB; CPU time:02:04:50
 ## HPC.daligner with DASedit DB
 ```
 source activate thegenemyers
-DBstats -b1 bananaDB-DASedit > DBstats.out
+DBstats -b1 preassemblyDB-DASedit > DBstats.out
 
-HPC.daligner -H6973 -T4 -fdalignerDASedit bananaDB-DASedit   
+HPC.daligner -H6973 -T4 -fdalignerDASedit preassemblyDB-DASedit   
 sh HPC.parallel_pbs.sh dalignerDASedit.01.OVL        #MEM:24GB; CPU time:05:17:29
 sh HPC.parallel_pbs.sh dalignerDASedit.02.CHECK.OPT        #MEM:0.001GB; CPU time:00:00:08
 sh HPC.parallel_pbs.sh dalignerDASedit.03.MERGE            #MEM:5GB; CPU time:00:02:00
