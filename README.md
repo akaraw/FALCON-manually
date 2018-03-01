@@ -4,11 +4,11 @@ For users who can't get PacBio's [FALCON](https://github.com/PacificBiosciences/
 ## Setup
 
 ### Install Gene Myers' tools
-Those tools can be found [here](https://github.com/thegenemyers). Easier way to install them is with help of [bioconda](https://github.com/bioconda/bioconda-recipes) `conda install damasker daligner dascrubber dazz_db`
+Those tools can be found [here](https://github.com/thegenemyers). Easier way to install them is with help of [bioconda](https://github.com/bioconda/bioconda-recipes) `conda install damasker daligner dascrubber dazz_db dextractor`
 
 ### Install Falcon-integrate
 ```
-module load gcc/4.9.3-2.25 #(you require at least gcc 4.9)
+module load gcc/4.9.3-2.25      #(Require at least gcc 4.9)
 git clone https://github.com/PacificBiosciences/FALCON-integrate.git
 cd FALCON-integrate
 find . -type f -print0 | xargs -0 sed -i.bak 's|git:|https:|g'
