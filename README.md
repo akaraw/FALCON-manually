@@ -21,17 +21,17 @@ make -j all
 make test
 ```
 
-## Commands to check each result
+### Convert RSII format to Sequel format
 ```
-grep "ill" <job_output>.o*                             # check whether no jobs have been killed
-grep "Mem" <job_output>.o* | cut -d':' -f3 | sort -    # Memory usage
-grep "CPU" <job_output>.o* | cut -d" " -f5 | sort -    # Time usage
+qsub bax2bam_pbs.sh         #Adjust the PATH inside the script
 ```
 
+### Convert BAM format to FASTA and Arrow format
+```
+qsub bam2fasta_pbs.sh       #Adjust the PATH inside the script
+```
 
-
-
-## Creating database
+### Create database
 ```
 source activate thegenemyers
 find /work/waterhouse_team/All_RawData/Each_Cell_Raw/ -name "*.arrow" -type f > fasta2DB_input.fofn
@@ -40,11 +40,19 @@ fasta2DB bananaDB -ffasta2DB_input.fofn
 
 DBsplit -x500 -s250 bananaDB
 DBdust bananaDB
-Catrack -v bananaDB dust
 ```
 
+### Commands to check each result
+```
+grep "ill" <job_output>.o*                             # check whether no jobs have been killed
+grep "Mem" <job_output>.o* | cut -d':' -f3 | sort -    # Memory usage
+grep "CPU" <job_output>.o* | cut -d" " -f5 | sort -    # Time usage
+```
 
-## TANmask
+## PREASSEMBLY 
+
+
+### TANmask
 ```
 source activate thegenemyers
 HPC.TANmask bananaDB -mdust -T4 -fTANmask
