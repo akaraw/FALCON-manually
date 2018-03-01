@@ -21,6 +21,10 @@ make -j all
 make test
 ```
 
+### Custom scripts
+
+`cp calc_cutoff.py <your path>/FALCON-integrate/FALCON/falcon_kit/`
+
 ### Convert RSII format to Sequel format
 ```
 qsub bax2bam_pbs.sh         #Adjust the PATH inside the script
@@ -80,8 +84,7 @@ rm .preassemblyDB.*.rep1.*
 source activate thegenemyers
 DBstats -b1 -mdust -mtan -mrep1 preassemblyDB > DBstats.out
 
-/work/waterhouse_team/apps/bin> python  calc_cutoff.py --genome_size 1800000000 --coverage 38 --db_stats
-/work/waterhouse_team/banana/assembly/DBstats.out
+python  <your path>/FALCON-integrate/FALCON/falcon_kit/calc_cutoff.py --genome_size 1800000000 --coverage 38 --db_stats DBstats.out
 6973
 
 HPC.daligner -mdust -mtan -mrep1 -H6973 -T4 -fdaligner preassemblyDB   
@@ -93,7 +96,6 @@ sh daligner.05.RM.OPT
 sh HPC.parallel_pbs.sh daligner.06.MERGE      #MEM:4GB; CPU time:00:00:09
 sh HPC.parallel_pbs.sh daligner.07.CHECK.OPT  #MEM:1.3GB; CPU time:00:00:09
 sh daligner.08.RM
-
 ```
 
 # DASCRUBBER
