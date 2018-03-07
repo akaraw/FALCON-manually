@@ -3,8 +3,8 @@ For users who can't get PacBio's [FALCON](https://github.com/PacificBiosciences/
 
 ## Setup
 
-### Install Gene Myers' tools
-Those tools can be found [here](https://github.com/thegenemyers). Easier way to install them is with help of [bioconda](https://github.com/bioconda/bioconda-recipes) `conda install damasker daligner dascrubber dazz_db dextractor`
+### Install Gene Myers' tools and some Python libraries 
+Those tools can be found [here](https://github.com/thegenemyers). Easier way to install them is with help of [bioconda](https://github.com/bioconda/bioconda-recipes) `conda install damasker daligner dascrubber dazz_db dextractor biopython click`
 
 ### Install Falcon-integrate
 ```
