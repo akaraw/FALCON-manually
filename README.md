@@ -158,13 +158,6 @@ Here is the script how I ran it:
 sh pread_pbs.sh                                         #MEM:80GB; CPU time:10:03:32
 ```
 
-
-
-
-
-
-
-
 ## ASSEMBLY
 
 ### Create a new dazzler DB from the preads.fasta file and DBsplit the database
@@ -175,8 +168,6 @@ fasta2DB assemblyDB -fassemblyDB_input.fofn
 
 DBsplit -x500 -s250 assemblyDB
 DBdust assemblyDB
-Catrack -v assemblyDB dust
-Catrack: Track file ./.assemblyDB.dust.anno already exists!  ????
 ```
 
 ### HPCdaligner
@@ -190,50 +181,17 @@ sh HPC.parallel_pbs.sh daligner-assemblyDB.04.CHECK.OPT   #MEM:1.5GB; CPU time:0
 sh daligner-assemblyDB.05.RM.OPT  
 ```
 
+### Output data in dazzler database to preads4falcon.fasta
+DB2Falcon generates automatically `preads4falcon.fasta`
+```
+qsub DB2Falcon_pbs.sh                                     ???#MEM:10GB; CPU time:00:01:54
+```
+
 ### Filter overlaps
 `overlap_filtering_setting = --max_diff 100 --max_cov 100 --min_cov 1 --bestn 10 --n_core 4`
 
-Future development:
-```
-rule auto_filter:
-    input: "preads4falcon.fasta"
-    output: "_preads.ovl"
-    run:
-        if os.path.isfile("preads.ovl"):
-            shell("rm preads.ovl")
-        nreads=0
-        ccov=0
-        with open(input[0]) as f:
-            for l in f:
-                if l.startswith('>'):
-                    nreads+=1
-                else:
-                    ccov+=len(l.strip())
-        cov=int(ccov/estgensize)
-        fdr=10
-        cdf=0
-        for i in range(0,cov+100):
-            cdf+=(math.e**(-cov)*(cov**i))/math.factorial(i)
-            if (1-cdf)*nreads<=fdr:
-                max_cov=i
-                min_cov=cov-(max_cov-cov) if cov-(max_cov-cov)>0 else 0
-                max_diff=max_cov-min_cov
-                break
-        else:
-            print("filter parameters could not be calculated due to low coverage, not filtering!")
-            return
+`fc_ovlp_filter_auto.py` automatically calculate settings for fc_ovlp_filter
 
-        if os.path.getsize("preads_lasfiles_local.fofn")>0:
-            shell("python2 `which fc_ovlp_filter` --db {subject}_preads --fofn preads_lasfiles_local.fofn --max_diff {max_diff} --max_cov {max_cov} --min_cov {min_cov} --bestn 10 --n_core 24 > preads.ovl")
-        else:
-            shell("touch preads.ovl")
-
-        print("Pread coverage depth: %s" % cov)
-        print("Pread cum. read length: %s" % ccov)
-        print("Number of preads: %s" % nreads)
-        print("max_cov",max_cov)
-        print("max_diff",max_diff)
-        print("min_cov",min_cov)
 ```
 
 ######### compare preads vs preads_stream
@@ -290,11 +248,7 @@ rule plot_stats:
 qsub fc_ovlp_to_graph_pbs.sh                              ???#MEM:7070664kb; CPU time:00:07:39
 ```
 
-### Output data in dazzler database to preads4falcon.fasta
-DB2Falcon generates automatically `preads4falcon.fasta`
-```
-qsub DB2Falcon_pbs.sh                                     ???#MEM:7070664kb; CPU time:00:01:54
-```
+
 
 
 ### Creating contigs
