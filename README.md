@@ -134,7 +134,7 @@ sh HPC.parallel_pbs.sh dalignerDASedit.07.CHECK.OPT         #MEM:1.3GB; CPU time
 sh dalignerDASedit.08.RM
 ```
 
-###LA4FALCON
+### LA4FALCON
 @skingan *"recommend against "falcon sense greedy" (`fog`) if your haplotypes are similar. "falcon sense skip contained" ('fso') is rarely used except in particular cases. Therefore: use 'fo.'"* [source](https://github.com/PacificBiosciences/FALCON/issues/606#issuecomment-365724325)
 
 Below is code snippet how FALCON handle this tast:
