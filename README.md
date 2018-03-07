@@ -184,29 +184,17 @@ sh daligner-assemblyDB.05.RM.OPT
 ### Output data in dazzler database to preads4falcon.fasta
 DB2Falcon generates automatically `preads4falcon.fasta`
 ```
-qsub DB2Falcon_pbs.sh                                     ???#MEM:10GB; CPU time:00:01:54
+qsub DB2Falcon_pbs.sh                                     #MEM:10GB; CPU time:00:01:54
 ```
 
 ### Filter overlaps
-`overlap_filtering_setting = --max_diff 100 --max_cov 100 --min_cov 1 --bestn 10 --n_core 4`
+`fc_ovlp_filter_auto.py` automatically calculate settings for fc_ovlp_filter or use FALCON example settings e.g. `overlap_filtering_setting = --max_diff 100 --max_cov 100 --min_cov 1 --bestn 10 --n_core 4`
 
-`fc_ovlp_filter_auto.py` automatically calculate settings for fc_ovlp_filter
-
-```
-
-######### compare preads vs preads_stream
-use `--stream` from LA4Falcon, instead of slurping all at once; can save memory for large data
 ```
 find . -name "assemblyDB.*.las" -type f > preads_lasfiles.fofn
-qsub fc_ovlp_filter.sh                                    ???#MEM:153688792kb; CPU time:121:22:46
+qsub fc_ovlp_filter_pbs.sh                                    #MEM:160GB; CPU time:121:22:46
 ```
-or
 
-```
-sh fc_ovlp_filter_hpc.sh
-sh fc_ovlp_filter_pbs.sh fc_ovlp_filter_cmds.txt          ???#MEM:55340412kb; CPU time:00:28:35
-cat preads.*.ovl > preads.ovl  ???
-```
 
 Future development:
 ```
@@ -242,14 +230,10 @@ rule plot_stats:
 ```
 
 ### Construct assembly graph
-`time python -m falcon_kit.mains.ovlp_to_graph {fc_ovlp_to_graph_option} --overlap-file preads.ovl >| fc_ovlp_to_graph.log`
-
+` falcon_kit.mains.ovlp_to_graph {fc_ovlp_to_graph_option}`
 ```
-qsub fc_ovlp_to_graph_pbs.sh                              ???#MEM:7070664kb; CPU time:00:07:39
+qsub fc_ovlp_to_graph_pbs.sh                              #MEM:7GB; CPU time:00:07:39
 ```
-
-
-
 
 ### Creating contigs
 https://github.com/PacificBiosciences/FALCON/blob/master/falcon_kit/mains/graph_to_contig.py
@@ -262,17 +246,9 @@ requires those files:
 
 Output is `p_ctg.fa`
 ```
-qsub fc_graph_to_contig_pbs.sh
+qsub fc_graph_to_contig_pbs.sh                             #MEM:35GB; CPU time:00:20:00
 
 ```
-
-
-
------
-PBS Job 2905124.pbs
-CPU time  : 00:18:53
-Wall time : 00:19:00
-Mem usage : 33032488kb
 
 
 ## Acknoledment
