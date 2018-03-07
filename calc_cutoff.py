@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import functional
 import click
 
