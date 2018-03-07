@@ -153,8 +153,7 @@ falcon_sense_option = --output_multi --min_idt 0.70 --min_cov 4 --max_n_read 200
 LA4Falcon -H$CUTOFF %s {db_fn} {las_fn} | python -m falcon_kit.mains.consensus {falcon_sense_option} >| {out_file_bfn}" % LA4Falcon_flags
 ```
 
-use `--stream` from LA4Falcon, instead of slurping all at once; can save memory for large data
-
+Here is the script how I ran it:
 ```
 sh pread_pbs.sh                                         #MEM:80GB; CPU time:10:03:32
 ```
