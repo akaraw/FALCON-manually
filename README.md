@@ -134,26 +134,11 @@ sh HPC.parallel_pbs.sh dalignerDASedit.07.CHECK.OPT         #MEM:1.3GB; CPU time
 sh dalignerDASedit.08.RM
 ```
 
-##LA4FALCON
-I would recommend against "falcon sense greedy" if your haplotypes are similar. "falcon sense skip contained" is rarely used except in particular cases. Therefore: use 'fo.' (https://github.com/PacificBiosciences/FALCON/issues/606#issuecomment-365724325)
+###LA4FALCON
+@skingan *"recommend against "falcon sense greedy" (`fog`) if your haplotypes are similar. "falcon sense skip contained" ('fso') is rarely used except in particular cases. Therefore: use 'fo.'"* [source](https://github.com/PacificBiosciences/FALCON/issues/606#issuecomment-365724325)
 
-use `--stream` from LA4Falcon, instead of slurping all at once; can save memory for large data
-
+Below is code snippet how FALCON handle this tast:
 ```
-sh pread_pbs.sh                                         #MEM:80GB; CPU time:10:03:32
-```
-
-
-
-
-LA4Falcon -H2000 -fo $pre.new.db bac.new.$i.las|  fc_consensus.py
---output_full --min_idt 0.70 --min_cov 5 --min_cov_aln 0 --max_n_read 200
---n_core 4  > $pre.new.$i.las.untrimmed.fa
-
-bash_cutoff = '$(python2.7 -m falcon_kit.mains.calc_cutoff --coverage {} {} <(DBstats -b1 {}))'.format(
-params['seed_coverage'], params['genome_size'], db_fn)
-
-
 LA4Falcon_flags = 'P' if params.get('LA4Falcon_preload') else ''
     if config["falcon_sense_skip_contained"]:
         LA4Falcon_flags += 'fso'
@@ -165,8 +150,21 @@ LA4Falcon_flags = 'P' if params.get('LA4Falcon_preload') else ''
 LA4Falcon_flags = '-' + ''.join(set(LA4Falcon_flags))
 
 falcon_sense_option = --output_multi --min_idt 0.70 --min_cov 4 --max_n_read 200 --n_core 6
-
 LA4Falcon -H$CUTOFF %s {db_fn} {las_fn} | python -m falcon_kit.mains.consensus {falcon_sense_option} >| {out_file_bfn}" % LA4Falcon_flags
+```
+
+use `--stream` from LA4Falcon, instead of slurping all at once; can save memory for large data
+
+```
+sh pread_pbs.sh                                         #MEM:80GB; CPU time:10:03:32
+```
+
+
+
+
+
+
+
 
 ## ASSEMBLY
 
