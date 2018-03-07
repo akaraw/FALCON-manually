@@ -21,7 +21,7 @@ source env.sh
 export PATH=/work/waterhouse_team/apps/FALCON-integrate/fc_env/bin:$PATH
 
 cd \$PBS_O_WORKDIR
-LA4Falcon -fo -H$H $db $i | fc_consensus --output_multi --n_core 1 > ${i}.preads.fasta
+LA4Falcon --stream -fo -H$H $db $i | fc_consensus --output_multi --n_core 1 > ${i}.preads.fasta
 
 EOF
 
