@@ -68,9 +68,11 @@ rm .preassemblyDB.*.tan.*
 ```
 
 #### HPC.REPmask
+REPmask will be given a repeat threshold, relative to the overall depth (e.g. if 3, then regions with 3x the base depth are considered repeats. `c = coverage * 3 = 58 * 3 = 174` [source](https://github.com/rrwick/DASCRUBBER-wrapper/blob/master/dascrubber_wrapper.py#L116)
+
 ```
 source activate thegenemyers
-HPC.REPmask -g1 -c20 -mdust -mtan preassemblyDB -T4 -fREPmask
+HPC.REPmask -g1 -c174 -mdust -mtan preassemblyDB -T4 -fREPmask
 sh HPC.parallel_pbs.sh REPmask.01.OVL           #MEM:30GB; CPU time:02:00:01
 sh HPC.parallel_pbs.sh REPmask.02.CHECK.OPT     #MEM:1.4GB; CPU time:00:00:03
 sh HPC.parallel_pbs.sh REPmask.03.MASK          #MEM:0.01GB; CPU time:00:00:06
