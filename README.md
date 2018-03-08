@@ -84,7 +84,7 @@ rm .preassemblyDB.*.rep1.*
 source activate thegenemyers
 DBstats -b1 -mdust -mtan -mrep1 preassemblyDB > DBstats.out
 
-python  <your path>/FALCON-integrate/FALCON/falcon_kit/calc_cutoff.py --genome_size 1800000000 --coverage 38 --db_stats DBstats.out
+python  <your path>/FALCON-integrate/FALCON/falcon_kit/calc_cutoff.py --genome_size 1.8G --db_stats DBstats.out
 6973
 
 HPC.daligner -mdust -mtan -mrep1 -H6973 -T4 -fdaligner preassemblyDB   
