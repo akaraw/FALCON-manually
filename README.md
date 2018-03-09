@@ -4,7 +4,7 @@ For users who can't get PacBio's [FALCON](https://github.com/PacificBiosciences/
 ## Setup
 
 ### Install Gene Myers' tools and some Python libraries 
-Those tools can be found [here](https://github.com/thegenemyers). Easier way to install them is with help of [bioconda](https://github.com/bioconda/bioconda-recipes) `conda install damasker daligner dascrubber dazz_db dextractor biopython click`
+Those tools can be found [here](https://github.com/thegenemyers). Easier way to install them is with help of [bioconda](https://github.com/bioconda/bioconda-recipes) `conda install damasker daligner dascrubber dazz_db dextractor biopython click data_hacks`
 
 ### Install Falcon-integrate
 ```
@@ -23,7 +23,7 @@ make test
 
 ### Custom scripts
 
-`cp calc_cutoff.py <your path>/FALCON-integrate/FALCON/falcon_kit/`
+`cp calc_cutoff.py seq_length.py <your path>/FALCON-integrate/FALCON/falcon_kit/`
 
 ### Convert RSII format to Sequel format
 ```
@@ -139,7 +139,7 @@ less allPacBio_histogram.txt
 75000.0000 - 80000.0000 [     1]:  (0.00%)
 80000.0000 - 82508.0000 [     1]:  (0.00%)
 ```
-
+```
 HPC.daligner -mdust -mtan -mrep1 -H6973 -T4 -fdaligner preassemblyDB   
 sh HPC.parallel_pbs.sh daligner.01.OVL        #MEM:22GB; CPU time:01:12:00
 sh HPC.parallel_pbs.sh daligner.02.CHECK.OPT  #MEM:0.001GB; CPU time:00:00:08
