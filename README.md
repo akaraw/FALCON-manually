@@ -307,8 +307,8 @@ qsub fc_graph_to_contig_pbs.sh                             #MEM:35GB; CPU time:0
 ```
 
 
-## Acknoledment
+## Acknowledgment
+The above pipeline is based on a Snakefile developed by @jasperlinthorst, [DASCRUBBER-wrapper](https://github.com/rrwick/DASCRUBBER-wrapper) developed by @rrwick and some input from @thegenemyers
 
-* https://github.com/rrwick/DASCRUBBER-wrapper (also for Nano)
-* https://github.com/thiesgehrmann/FungalAssemblerPipeline
+
 
