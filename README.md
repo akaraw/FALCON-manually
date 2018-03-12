@@ -55,7 +55,7 @@ grep "CPU" <job_output>.o* | cut -d" " -f5 | sort -    # Time usage
 
 ## PREASSEMBLY 
 ### Damasker: The Dazzler Repeat Masking Suite
-#### TANmask
+#### TANmask - Finding tandem repeats
 ```
 source activate thegenemyers
 HPC.TANmask preassemblyDB -mdust -T4 -fTANmask
@@ -67,7 +67,7 @@ Catrack -v preassemblyDB tan
 rm .preassemblyDB.*.tan.*
 ```
 
-#### HPC.REPmask
+#### REPmask - Masking repeats
 REPmask will be given a repeat threshold, relative to the overall depth (e.g. if 3, then regions with 3x the base depth are considered repeats. `c = coverage * 3 = 58 * 3 = 174` [source](https://github.com/rrwick/DASCRUBBER-wrapper/blob/master/dascrubber_wrapper.py#L116)
 
 ```
@@ -81,7 +81,7 @@ Catrack -v preassemblyDB rep1
 rm .preassemblyDB.*.rep1.*
 ```
 
-### HPC.daligner
+### HPC.daligner - Read overlap alignment with daligner (with repeat masking)
 ```
 source activate thegenemyers
 ```
@@ -152,28 +152,31 @@ sh daligner.08.RM
 ```
 
 ### Dascrubber: The Dazzler Read Scrubbing Suite
+#### DASqv - Finding intrinsic quality values
 ```
 ./DASqv_pbs.sh preassemblyDB 6973 38                #MEM:0.5GB; CPU time:00:00:19
 Catrack -v preassemblyDB qual
 rm .preassemblyDB.*.qual.*
 ```
-
+#### DAStrim - Trimming reads and breaking chimeras 
 ```
 find . -name "*.DAStrim" -type f -exec cat {} + > DAStrim-cmds
 sh HPC.parallel_pbs.sh DAStrim-cmds                 #MEM:1.1GB; CPU time:00:00:26
 Catrack -v preassemblyDB trim  
 ```
 
+#### DASpatch - Patching low quality segments 
 ```
 sh DASpatch_pbs.sh preassemblyDB                    #MEM:1.4GB; CPU time:00:00:16
 Catrack -v preassemblyDB patch  
 ```
 
+#### DASedit - Building new database of scrubbed reads 
 ```
 qsub DASedit_pbs.sh                                 #MEM:0.9GB; CPU time:02:04:50
 ```
 
-### HPC.daligner with DASedit DB
+#### HPC.daligner with DASedit DB
 ```
 source activate thegenemyers
 HPC.daligner -H6973 -T4 -fdalignerDASedit preassemblyDB-DASedit   
